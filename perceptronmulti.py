@@ -120,44 +120,34 @@ if __name__ == '__main__':
     global titreGraphique
     titreGraphique =''
     
-    def learn(network,samples, epochs=5000, lrate=.1, momentum=0.1):
+    def learn(network,samples, epochs=2500, lrate=.1, momentum=0.1):
         # Train
         print '    Train'
-        erreur_ok_y,erreur_ok_x= [],[]# coordonnees des points qui sont ok
-        erreur_ko_y,erreur_ko_x= [],[]# coordonnees des points qui sont Ko
         
         for i in range(epochs):
             n = np.random.randint(samples.size)
-            #print 'n : ', n
-            #print 'samples[input][n] : ',samples['input'][n]
-            #print 'samples[output][n] : ',samples['output'][n]
             point = samples['input'][n]
             expectedOutput = samples['output'][n]
             output = network.propagate_forward(point )[0]
-            nbLearn = 0
-            while abs(output - expectedOutput) > 0.1:
-                #print 'nbLearn = ',nbLearn
-                nbLearn = nbLearn+1
+            while abs(output - expectedOutput) >= 0.1:
                 network.propagate_backward( expectedOutput, lrate, momentum )
                 output = network.propagate_forward( point )[0]
+
+    def test(network, listeSamples, titreGraphique):
         # Test
         print '    Test'
-        for i in range(200):
-            point =  ListeSamples[i]
-            expectedOutput = 1.0
-            if i > 100:
-                expectedOutput = -1.0
 
+        erreur_ok_y,erreur_ok_x= [],[]# coordonnees des points qui sont ok
+        erreur_ko_y,erreur_ko_x= [],[]# coordonnees des points qui sont Ko
+        
+        for i in range(len(listeSamples)):
+            point =  listeSamples[i]
+            expectedOutput = 1.0
+            if i >= 100:
+                expectedOutput = -1.0
             output = network.propagate_forward(point)[0]
-##            print 'output  : ',output
-           # print 'output type : ',type(output)
-           # print 'expectedOutput type : ',type(expectedOutput)
-          ##  print i, samples['input'][i], '%.2f' % o[0],            
-         #   print '(expected %.2f)' % samples['output'][i]
-            
             differenceEnValeurAbsolue = abs(output - expectedOutput)
-         #   print 'differenceEnValeurAbsolue : ',differenceEnValeurAbsolue,' - abs(samples[output][i]) : ', abs(samples['output'][i]), '  - o[0]:', abs(o[0])
-            if differenceEnValeurAbsolue <= 0.5:
+            if differenceEnValeurAbsolue <= 1:
                 erreur_ok_y.append(output)
                 erreur_ok_x.append(i)
             else :
@@ -178,22 +168,97 @@ if __name__ == '__main__':
         axis([0,tailleListeCoordonnees,-2,2])
         grid()          
         show()
+
+    def learnTriangle(nb_samples_triangle):
+        #Exemple 5: Learning triangulus
+        # -------------------------------------------------------------------------    
+        print "Learning the triangle"
+        network = MLP(2,3,1)
+        samples_t = np.zeros(2*nb_samples_triangle, dtype=[('input',  float, 2), ('output', float, 1)])
+        triangle = st.samples(nb_samples_triangle)
+        triangle.create_samples()
+        for i in range (triangle.nb_samples):
+            samples_t[i]=triangle.samples[i]
             
-        
-    ##############################################################################    
-    nb_samples_triangle=3000                                                      #
-    nb_samples_carre=3000                                                         #
-    nb_samples_hexagone=3000                                                      #                                                  
-    nb_samples_octogone=3000                                                     #
-    ##############################################################################
-    network = MLP(2,2,1)
-    samples = np.zeros(4, dtype=[('input',  float, 2), ('output', float, 1)])
-    samples_t = np.zeros(2*nb_samples_triangle, dtype=[('input',  float, 2), ('output', float, 1)])
-    samples_c = np.zeros(2*nb_samples_carre, dtype=[('input',  float, 2), ('output', float, 1)])
-    samples_h = np.zeros(2*nb_samples_hexagone, dtype=[('input',  float, 2), ('output', float, 1)])
-    samples_o = np.zeros(2*nb_samples_octogone, dtype=[('input',  float, 2), ('output', float, 1)])
-    # Example 1 : OR logical function
-    # -------------------------------------------------------------------------
+        listeSamples = st.exercice.samples_list
+        titreGraphique = 'Apprentissage du triangle'
+        learn(network,samples_t)
+        test(network,listeSamples,titreGraphique)
+        displayForm( triangle.samples_in, triangle.samples_out)
+
+    def learnCarre(nb_samples_triangle):
+         #Exemple 6: Learning square
+        # ---------------------------------------------------------------------
+        print "Learning the carre"
+        network = MLP(2,4,1)
+        samples_c = np.zeros(2*nb_samples_carre, dtype=[('input',  float, 2), ('output', float, 1)])
+        carre=sc.samples(nb_samples_carre)
+        carre.create_samples()
+        for i in range (carre.nb_samples):
+            samples_c[i]=carre.samples[i]
+
+        listeSamples = sc.exercice.samples_list
+        titreGraphique = ' Apprentissage du carre'
+        learn(network,samples_c)
+        test(network,listeSamples,titreGraphique)
+        displayForm( carre.samples_in, carre.samples_out)
+
+    def learnHexagone(nb_samples_hexagone):
+        print "Learning the hexagone "
+        network = MLP(2,6,1)
+        samples_h = np.zeros(2*nb_samples_hexagone, dtype=[('input',  float, 2), ('output', float, 1)])
+        hexagone=sh.samples(nb_samples_hexagone)
+        hexagone.create_samples()
+        for i in range (hexagone.nb_samples):
+            samples_h[i]=hexagone.samples[i]
+
+        listeSamples = sh.exercice.samples_list
+        titreGraphique = 'Apprentissage de lHexagone'
+        learn(network,samples_h)
+        test(network,listeSamples,titreGraphique)
+        displayForm( hexagone.samples_in, hexagone.samples_out)
+
+    def learnOctogone(nb_samples_octogone):
+        print "Learning the octogone"
+        network = MLP(2,8,1)
+        samples_o = np.zeros(2*nb_samples_octogone, dtype=[('input',  float, 2), ('output', float, 1)])
+        octogone=so.samples(nb_samples_octogone)
+        octogone.create_samples()
+        for i in range (octogone.nb_samples):
+            samples_o[i]=octogone.samples[i]
+
+        listeSamples = so.exercice.samples_list
+        titreGraphique='Apprentissage de lOctogone'
+        learn(network,samples_o)
+        test(network,listeSamples,titreGraphique)
+        displayForm( octogone.samples_in, octogone.samples_out)
+
+    def displayForm( liste_sample_in, liste_sample_out):
+        print '    Display'
+        x,y=[],[]
+        for i in range(len(liste_sample_in)):
+            x.append(liste_sample_in[i][0][0])
+            y.append(liste_sample_in[i][0][1])
+            plot(x, y, 'bx')
+
+        x,y=[],[]
+
+        for i in range(len(liste_sample_out)):
+            x.append(liste_sample_out[i][0][0])
+            y.append(liste_sample_out[i][0][1])
+            plot(x, y,'rx') 
+
+           
+        axis([-6,6,-6,6])
+        grid()          
+        show()
+    
+   
+##    network = MLP(2,2,1)
+##    samples = np.zeros(4, dtype=[('input',  float, 2), ('output', float, 1)])
+##    
+##    # Example 1 : OR logical function
+##    # -------------------------------------------------------------------------
 ##    print "Learning the OR logical function"
 ##    network.reset()
 ##    samples[0] = (0,0), 0    
@@ -203,153 +268,14 @@ if __name__ == '__main__':
 ##    
 ##    learn(network, samples)
 
-    #Exemple 5: Learning triangulus
-    # -------------------------------------------------------------------------    
-    print "Learning the triangle"
-    network.reset()
-    network = MLP(2,3,1)
-    triangle=st.samples(nb_samples_triangle)
-    triangle.create_samples()
-    for i in range (triangle.nb_samples):
-        samples_t[i]=triangle.samples[i]
-        
-    ListeSamples = st.exercice.samples_list
-    titreGraphique = 'Apprentissage du triangle'
-    learn(network,samples_t)
-##    #print "poids finaux du triangle", network.weights
-##    #print "layer", network.layers
- 
-    #Exemple 6: Learning square
-    # ---------------------------------------------------------------------
-    print "Learning the carre"
-    network.reset()
-    network = MLP(2,4,1)
-    carre=sc.samples(nb_samples_carre)
-    carre.create_samples()
-    for i in range (carre.nb_samples):
-        samples_c[i]=carre.samples[i]
-    ListeSamples = sc.exercice.samples_list
-    titreGraphique = ' Apprentissage du carre'
-    learn(network,samples_c)
-    
-    #print "layer", network.layers
-    #print "poids finaux du carre", network.weights
-    
-##    #Exemple 6: Learning hexagone
-    # ---------------------------------------------------------------------
-    print "Learning the hexagone "
-    network.reset()
-    network = MLP(2,6,1)
-    hexagone=sh.samples(nb_samples_hexagone)
-    hexagone.create_samples()
-    for i in range (hexagone.nb_samples):
-        samples_h[i]=hexagone.samples[i]
+    ##############################################################################    
+    nb_samples_triangle=100                                                      #
+    nb_samples_carre=100                                                         #
+    nb_samples_hexagone=100                                                      #                                                  
+    nb_samples_octogone=100                                                     #
+    ##############################################################################
 
-    ListeSamples = sh.exercice.samples_list
-    titreGraphique = 'Apprentissage de lHexagone'
-    learn(network,samples_h)
-    
-##    #print "layer", network.layers
-##    #print "poids finaux de hexagone", network.weights
-##
-##    #Exemple 6: Learning octogone
-##    # ---------------------------------------------------------------------
-    print "Learning the octogone"
-    network.reset()
-    network = MLP(2,8,1)
-    octogone=so.samples(nb_samples_octogone)
-    octogone.create_samples()
-    for i in range (octogone.nb_samples):
-        samples_o[i]=octogone.samples[i]
-
-    ListeSamples = so.exercice.samples_list
-    titreGraphique='Apprentissage de lOctogone'
-    learn(network,samples_o)
-    
-##    #print "layer", network.layers
-##    #print "poids finaux du carre", network.weights
-    #---------------------------------------------------------------------
-    #Affichage                                                           |
-    #---------------------------------------------------------------------
-    #triangle
-##print 'Affichage triangle'
-##x,y=[],[]
-##for i in range(len(triangle.samples_in)):
-##    x.append(triangle.samples_in[i][0][0])
-##    y.append(triangle.samples_in[i][0][1])
-##    plot(x, y, 'bx')
-##
-##x,y=[],[]
-##
-##for i in range(len(triangle.samples_out)):
-##    x.append(triangle.samples_out[i][0][0])
-##    y.append(triangle.samples_out[i][0][1])
-##    plot(x, y,'rx') 
-##
-##   
-##axis([-5,5,-5,5])
-##grid()          
-##show()
-##
-##
-##    #---------------------------------------------------------------------
-##    #Square
-##print 'Affichage carre'
-##
-##x,y=[],[]
-##for i in range(nb_samples_carre/2):
-##    x.append(carre.samples_in[i][0][0])
-##    y.append(carre.samples_in[i][0][1])
-##    plot(x, y, 'bx')
-##
-##x,y=[],[]
-##for i in range(nb_samples_carre/2):
-##    x.append(carre.samples_out[i][0][0])
-##    y.append(carre.samples_out[i][0][1])
-##    plot(x, y,'rx') 
-##
-##   
-##axis([-4,4,-4,4])
-##grid()          
-##show()
-##
-####    #---------------------------------------------------------------------
-####    #hexagone
-##print 'Affichage hexagone'
-##x,y=[],[]
-##for i in range(len(hexagone.samples_in)):
-##    x.append(hexagone.samples_in[i][0][0])
-##    y.append(hexagone.samples_in[i][0][1])
-##    plot(x, y, 'bx')
-##
-##x,y=[],[]
-##
-##for i in range(len(hexagone.samples_out)):
-##    x.append(hexagone.samples_out[i][0][0])
-##    y.append(hexagone.samples_out[i][0][1])
-##    plot(x, y,'rx') 
-##
-##   
-##axis([-5,5,-5,5])
-##grid()          
-###show()
-##    #---------------------------------------------------------------------
-####    #octogone
-##print 'Affichage Octogone'
-##x,y=[],[]
-##for i in range(len(octogone.samples_in)):
-##    x.append(octogone.samples_in[i][0][0])
-##    y.append(octogone.samples_in[i][0][1])
-##    plot(x, y, 'bx')
-##
-##x,y=[],[]
-##
-##for i in range(len(octogone.samples_out)):
-##    x.append(octogone.samples_out[i][0][0])
-##    y.append(octogone.samples_out[i][0][1])
-##    plot(x, y,'rx') 
-##
-##   
-##axis([-5,5,-5,5])
-##grid()          
-##show()
+    learnTriangle(nb_samples_triangle)
+    learnCarre(nb_samples_carre)
+    learnHexagone(nb_samples_hexagone)
+    learnOctogone(nb_samples_octogone)

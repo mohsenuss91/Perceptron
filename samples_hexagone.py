@@ -41,7 +41,7 @@ class samples:
                 self.samples_temp_list.append([x,y])
         
         for i in range (self.nb_samples):
-            tuple_out = ((self.samples_out[i][0],self.samples_out[i][1]),0)
+            tuple_out = ((self.samples_out[i][0],self.samples_out[i][1]),-1)
             self.samples_out[i]= tuple_out
 
         self.samples_temp = self.samples_in+self.samples_out

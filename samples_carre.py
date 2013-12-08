@@ -23,7 +23,7 @@ class samples:
             self.samples_temp_list.append([x,y])
 
         for i in range (self.nb_samples):
-            tuple_in = (self.samples_in[i][0],self.samples_in[i][1]),1
+            tuple_in = ((self.samples_in[i][0],self.samples_in[i][1]),1)
             self.samples_in[i]= tuple_in
             self.samples_list.append(tuple_in[0][0])
             
@@ -35,12 +35,13 @@ class samples:
         while len(self.samples_out)<(self.nb_samples):
             x = random.uniform(-5,5)
             y = random.uniform(-5,5)
-            if y>=-3 and y<=3 and x>=-3 and x <=3:
+            if (x<-3 or x>3) or (y<-3 or y>3):
+##            if y<-3 or y>3 and x<-3 or x >3:
                 self.samples_out.append([x,y])
                 self.samples_temp_list.append([x,y])
         
         for i in range (self.nb_samples):
-            tuple_out = ((self.samples_out[i][0],self.samples_out[i][1]),0)
+            tuple_out = ((self.samples_out[i][0],self.samples_out[i][1]),-1)
             self.samples_out[i]= tuple_out       
             
         self.samples_temp=self.samples_in+self.samples_out

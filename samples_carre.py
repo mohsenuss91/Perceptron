@@ -17,8 +17,8 @@ class samples:
 ##        print "Nombre d'exemple cree  pour le carre",self.nb_samples
 
         while len(self.samples_in)<(self.nb_samples):
-            x = random.uniform(-3,3)
-            y = random.uniform(-3,3)
+            x = random.uniform(-1,1)
+            y = random.uniform(-1,1)
             self.samples_in.append([x,y])
             self.samples_temp_list.append([x,y])
 

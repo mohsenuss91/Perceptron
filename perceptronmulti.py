@@ -173,7 +173,7 @@ if __name__ == '__main__':
         #Exemple 5: Learning triangulus
         # -------------------------------------------------------------------------    
         print "Learning the triangle"
-        network = MLP(2,3,1)
+        network = MLP(2,3,1)# reseau
         samples_t = np.zeros(2*nb_samples_triangle, dtype=[('input',  float, 2), ('output', float, 1)])
         triangle = st.samples(nb_samples_triangle)
         triangle.create_samples()

@@ -17,22 +17,10 @@ class samples:
 ##        print "Nombre d'exemple cree  pour le carre",self.nb_samples
 
         while len(self.samples_in)<(self.nb_samples):
-            x = random.uniform(-5,5)
-            y = random.uniform(-5,5)
-            a,b = 0,0
-            if (x>0.5 and x <1):
-                b=x
-            if (x>-1 and x<-0.5):
-                b=x
-            if(y>0.5 and y <1) :
-                a=y
-            if (y>-1 and y<-0.5):
-                a=y
-                            
-            if a != 0 and b!=0:
-                self.samples_in.append([b,a])
-                self.samples_temp_list.append([b,a])
-
+            x = random.uniform(-1,1)
+            y = random.uniform(-1,1)
+            self.samples_in.append([x,y])
+            self.samples_temp_list.append([x,y])
 
         for i in range (self.nb_samples):
             tuple_in = ((self.samples_in[i][0],self.samples_in[i][1]),1)
@@ -44,15 +32,13 @@ class samples:
             
         #samples outside
 ##        print "Points HORS du carre : "
-             
         while len(self.samples_out)<(self.nb_samples):
             x = random.uniform(-5,5)
             y = random.uniform(-5,5)
-            if (x>=1 and x <=1.5) or (x>=-1.5 and x<=-1):
-                if (y>=1 and y <=1.5) or (y>=-1.5 and y<=-1):
-
-                    self.samples_out.append([x,y])
-                    self.samples_temp_list.append([x,y])
+            if (x<-3 or x>3) or (y<-3 or y>3):
+##            if y<-3 or y>3 and x<-3 or x >3:
+                self.samples_out.append([x,y])
+                self.samples_temp_list.append([x,y])
         
         for i in range (self.nb_samples):
             tuple_out = ((self.samples_out[i][0],self.samples_out[i][1]),-1)
@@ -70,9 +56,9 @@ class samples:
             self.samples_list[i]=self.samples_temp_list[i]
 
 ##        print "#---------------------------------------------------------#"
-exercice=samples(10)
+exercice=samples(100)
 exercice.create_samples()
-#print 'Exercice dans le carre : '
-
+##print 'Exercice dans le carre : '
+##print exercice.samples
 
 

@@ -79,7 +79,7 @@ class MLP:
         return self.layers[-1]
 
 
-    def propagate_backward(self, target, lrate=0.1, momentum=0.1):
+    def propagate_backward(self, target, lrate=0.001, momentum=0.1):
         ''' Back propagate error related to target using lrate. '''
 
         deltas = []
@@ -182,9 +182,9 @@ if __name__ == '__main__':
             
         listeSamples = st.exercice.samples_list
         titreGraphique = 'Apprentissage du triangle'
-        learn(network,samples_t)
-        test(network,listeSamples,titreGraphique)
-        displayForm( triangle.samples_in, triangle.samples_out)
+        #learn(network,samples_t)
+        #test(network,listeSamples,titreGraphique)
+        #displayForm( triangle.samples_in, triangle.samples_out)
 
     def learnCarre(nb_samples_triangle):
          #Exemple 6: Learning square
@@ -199,8 +199,8 @@ if __name__ == '__main__':
 
         listeSamples = sc.exercice.samples_list
         titreGraphique = ' Apprentissage du carre'
-        learn(network,samples_c)
-        test(network,listeSamples,titreGraphique)
+        #learn(network,samples_c)
+        #test(network,listeSamples,titreGraphique)
         displayForm( carre.samples_in, carre.samples_out)
 
     def learnHexagone(nb_samples_hexagone):

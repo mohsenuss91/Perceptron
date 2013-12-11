@@ -120,7 +120,7 @@ if __name__ == '__main__':
     global titreGraphique
     titreGraphique =''
     
-    def learn(network,samples, epochs=2500, lrate=.1, momentum=0.1):
+    def learn(network,samples, epochs=2500, lrate=.001, momentum=0.1):
         # Train
         print '    Train'
         
